@@ -12,6 +12,12 @@
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+
+    <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/all.min.css') }}">
+
+
 
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
@@ -21,7 +27,7 @@
 
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-transparent">
+    <nav class="navbar navbar-expand-lg navbar-light bg-transparent">
         <div class="container-fluid">
             <!-- Align items to the left -->
             <div class="d-flex align-items-center">
@@ -42,7 +48,18 @@
 
             <!-- Align items to the right -->
             <div class="d-flex align-items-center justify-content-end">
-                <ul class="navbar-nav  text-center">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <span class="position-relative">
+                                <i class="fa fa-bell fa-lg"></i>
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                    99+
+                                    <span class="visually-hidden">unread messages</span>
+                                </span>
+                            </span>
+                        </a>
+                    </li>
                     @guest
                             @if (Route::has('login'))
                                 <li class="nav-item">
