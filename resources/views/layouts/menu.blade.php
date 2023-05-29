@@ -64,12 +64,12 @@
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-transparent">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
             <!-- Align items to the left -->
             <div class="d-flex align-items-center">
-              <a class="navbar-brand" href="{{route('home') }}"><img src="image/logo.gif" alt="Logo" style="width: 100px; height: 100px;"></a>
-          </div>
+              <a class="navbar-brand" href="{{route('home') }}"><img src="image/logo.png" alt="Logo" style="width: 100px; height: 80px;"></a>
+            </div>
 
           <!-- Align items to the middle -->
           <div class="d-flex align-items-center justify-content-center text-center">
@@ -80,12 +80,23 @@
                 <li class="nav-item">
                     <a class="nav-link {{ request()->is('product*') ? 'active' : '' }}" href="{{ route('product') }}">Product</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->is('about*') ? 'active' : '' }}" href="{{ route('about') }}">About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->is('contact*') ? 'active' : '' }}" href="#">Contact</a>
+                </li>
             </ul>
         </div>
 
         <!-- Align items to the right -->
         <div class="d-flex align-items-center justify-content-end">
             <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <i class="fa fa-shopping-cart fa-lg"></i>
+                    </a>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">
                         <span class="position-relative">
@@ -106,26 +117,29 @@
 
                 @if (Route::has('register'))
                 <li class="nav-item">
-                    <a class="nav-link" role="button" data-bs-toggle="modal" data-bs-target="#staticBackdrop">{{ __('Register') }}</a>
+                    <a class="nav-link" role="button" data-bs-toggle="modal" data-bs-target="#staticBackdrop">{{ __('Sign Up') }}</a>
                 </li>
                 @endif
                 @else
                 <li class="nav-item dropdown">
-                    <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                        {{ Auth::user()->name }}
+                    <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre><img src="@if(Auth::user()->avatar_path == null) {{ asset('image/default-avatar.jpg') }}  @else {{ asset('storage/avatars/'.Auth::user()->avatar_path) }} @endif" class="rounded-circle" style="width: 30px;">
                     </a>
 
                     <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="#"><i class="fa fa-solid fa-gear" style="color: #4b4e53;"></i>{{ __(' Setting') }}
+                        </a>
+                        <a class="dropdown-item" href="#"><i class="fa fa-solid fa-user" style="color: #4b4e53;"></i>{{ __(' Profile') }}
+                        </a>
                         <a class="dropdown-item" href="{{ route('logout') }}"
                         onclick="event.preventDefault();
-                        document.getElementById('logout-form').submit();">
-                        {{ __('Logout') }}
-                    </a>
+                        document.getElementById('logout-form').submit();"><i class="fa fa-sign-out" style="color: #4b4e53;"></i>
+                        {{ __(' Logout') }}
+                        </a>
 
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                        @csrf
-                    </form>
-                </div>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                            @csrf
+                        </form>
+                    </div>
             </li>
             @endguest
         </ul>
@@ -137,6 +151,7 @@
     @yield('content')
 </main>
 
+@include('layouts.footer')
 <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="true" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
@@ -146,7 +161,7 @@
                         <div class="col-md-6 p-5">
                                 <div class="mb-3 toggle-container">
                                     <button class="toggle-btn active" id="login-toggle">Login</button>
-                                    <button class="toggle-btn" id="register-toggle">Register</button>
+                                    <button class="toggle-btn" id="register-toggle">Sign Up</button>
                                 </div>
                                 <div id="login-content" class="content visible">
                                     <form method="POST" action="{{ route('login') }}">
@@ -326,6 +341,18 @@
             }
         });
     });
+
+        $(document).ready(function() {
+            // Check if the modal should be shown
+            var showLoginModal = '{{ session("show_login_modal") }}';
+            var isAuthenticated = '{{ Auth::check() }}';
+            
+            if (showLoginModal && !isAuthenticated) {
+                $('#staticBackdrop').modal('show');
+            }
+        });
+
+
 </script>
 @stack('scripts')
 </body>
